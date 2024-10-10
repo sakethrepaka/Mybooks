@@ -26,9 +26,10 @@
       "output": "static",
       "favicon": "./assets/images/favicon.png"
     },
-    "plugins": [
-      "expo-router"
-    ],
+    "extra": {
+      "HASURA_ADMIN_SECRET": "IB1EZJIE0tQIYp27g40S1zrU60ywUe6y64XdUSAPLYs0tZBRGANBVog0Enk6YvCB"
+    },
+    "plugins": ["expo-router"],
     "experiments": {
       "typedRoutes": true
     }

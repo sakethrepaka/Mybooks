@@ -1,19 +1,16 @@
-import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
-import { useFonts } from 'expo-font';
-import { Stack } from 'expo-router';
-import * as SplashScreen from 'expo-splash-screen';
-import { useEffect } from 'react';
-import 'react-native-reanimated';
+import { Stack } from "expo-router";
+import { ApolloProvider } from "@apollo/client";
+import client from "../services/client";
+import * as SplashScreen from "expo-splash-screen";
+import { useEffect } from "react";
+import { useFonts } from "expo-font";
+import { Image, StyleSheet, View, Text } from "react-native";
 
-import { useColorScheme } from '@/hooks/useColorScheme';
-
-// Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
-  const colorScheme = useColorScheme();
   const [loaded] = useFonts({
-    SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
+    SpaceMono: require("../assets/fonts/SpaceMono-Regular.ttf"),
   });
 
   useEffect(() => {
@@ -26,12 +23,35 @@ export default function RootLayout() {
     return null;
   }
 
+  const Logoheader = () => {
+    return (
+      <Image
+        style={styles.image}
+        source={require("../assets/images/icon.png")}
+      ></Image>
+    );
+  };
+
   return (
-    <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <Stack>
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen name="+not-found" />
+    <ApolloProvider client={client}>
+      <Stack initialRouteName="index" screenOptions={{ headerShown: false }}>
+        <Stack.Screen name="index" />
+        <Stack.Screen
+          options={{
+            headerShown: true,
+            headerTitle: (props) => <Logoheader {...props} />,
+          }}
+          name="[author]"
+          getId={({ params }) => String(Date.now())}
+        />
       </Stack>
-    </ThemeProvider>
+    </ApolloProvider>
   );
 }
+
+const styles = StyleSheet.create({
+  image: {
+    width: 50,
+    height: 50,
+  },
+});
